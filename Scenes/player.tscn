@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://b7xp4yxnwpoxo"]
+
+[ext_resource type="Script" uid="uid://bopdjeywbvy00" path="res://Scripts/player.gd" id="1_fkybt"]
+[ext_resource type="Shader" uid="uid://bhn3kxdytt50l" path="res://Scripts/player.gdshader" id="2_x3wgy"]
+[ext_resource type="Texture2D" uid="uid://cdt5j3o25y14j" path="res://icon.svg" id="3_3smsa"]
+[ext_resource type="FontFile" uid="uid://lb57psohyn0x" path="res://Assets/VCR_OSD_MONO_1.001.ttf" id="4_8erm5"]
+[ext_resource type="Texture2D" uid="uid://cx5kc0aaykc0r" path="res://Assets/light.png" id="5_f1ek2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_luj3t"]
+radius = 32.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qv8o1"]
+shader = ExtResource("2_x3wgy")
+shader_parameter/ring_width = 0.025
+shader_parameter/ring_rad = 0.31
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gio65"]
+blend_mode = 1
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_fkybt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_luj3t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_qv8o1")
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_3smsa")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = -23.0
+offset_top = -11.0
+offset_right = 23.0
+offset_bottom = 11.0
+theme_override_fonts/font = ExtResource("4_8erm5")
+theme_override_font_sizes/font_size = 20
+text = "12A"
+horizontal_alignment = 1
+
+[node name="LightSprite" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(0.36, 0.36, 0.36, 1)
+material = SubResource("CanvasItemMaterial_gio65")
+scale = Vector2(3, 3)
+texture = ExtResource("5_f1ek2")
+offset = Vector2(50, 0)

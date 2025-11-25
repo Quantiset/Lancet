@@ -1,3 +1,131 @@
-[gd_scene format=3 uid="uid://dw4hkqqhmpd0f"]
+[gd_scene load_steps=13 format=3 uid="uid://dw4hkqqhmpd0f"]
+
+[ext_resource type="Script" uid="uid://pntmh8u0m0tv" path="res://Scripts/bunker.gd" id="1_lwc5i"]
+[ext_resource type="PackedScene" uid="uid://b7xp4yxnwpoxo" path="res://Scenes/player.tscn" id="2_7hew7"]
+[ext_resource type="Texture2D" uid="uid://cdt5j3o25y14j" path="res://icon.svg" id="2_xxrj8"]
+[ext_resource type="PackedScene" uid="uid://cxx4d4hasyntl" path="res://Scenes/crate.tscn" id="3_2hvqq"]
+[ext_resource type="Shader" uid="uid://cxcggo4476phy" path="res://Scripts/flicker_ground.gdshader" id="3_8imk4"]
+[ext_resource type="Texture2D" uid="uid://c70on5bjrkf5j" path="res://Assets/mask.png" id="3_qv8o1"]
+[ext_resource type="Texture2D" uid="uid://xw3hid5v82w6" path="res://Assets/alpha_light.png" id="4_qv8o1"]
+[ext_resource type="Texture2D" uid="uid://buahpenxb6vmc" path="res://Assets/tile.png" id="6_lwc5i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8imk4"]
+size = Vector2(20, 128)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8imk4"]
+shader = ExtResource("3_8imk4")
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_xxrj8"]
+
+[sub_resource type="Environment" id="Environment_gio65"]
+background_mode = 3
+tonemap_mode = 2
+glow_enabled = true
+glow_bloom = 0.03
+glow_blend_mode = 0
+adjustment_enabled = true
 
 [node name="Bunker" type="Node2D"]
+script = ExtResource("1_lwc5i")
+
+[node name="Player" parent="." instance=ExtResource("2_7hew7")]
+position = Vector2(8, 136)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="Walls"]
+color = Color(0.08627451, 0.09411765, 0.09411765, 1)
+invert_enabled = true
+invert_border = 500.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Walls"]
+build_mode = 1
+
+[node name="Line2D" type="Line2D" parent="Walls"]
+points = PackedVector2Array(-192, -128, 128, -128, 128, 0, 320, 0, 320, 128, 128, 128, 128, 256, -192, 256, -192, -128)
+width = 8.0
+default_color = Color(0.069599986, 0.87, 0.10961994, 1)
+
+[node name="Glass" type="StaticBody2D" parent="."]
+
+[node name="Line2D" type="Line2D" parent="Glass"]
+points = PackedVector2Array(128, 0, 128, 128)
+width = 8.0
+default_color = Color(0.069599986, 0.87, 0.10961994, 0.29411766)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Glass"]
+position = Vector2(136, 64)
+shape = SubResource("RectangleShape2D_8imk4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+follow_viewport_enabled = true
+
+[node name="Wires" type="Node2D" parent="CanvasLayer"]
+modulate = Color(0.42362812, 1.5229772, 0.051456057, 1)
+
+[node name="Line2D" type="Line2D" parent="CanvasLayer/Wires"]
+points = PackedVector2Array(128, 16, 112, 16, 104, 8, 104, 0, 104, -8, 104, -16, 112, -8, 120, -16, 112, -24, 120, -32, 120, -40, 128, -56)
+width = 7.0
+joint_mode = 2
+
+[node name="Crates" type="Node2D" parent="CanvasLayer"]
+
+[node name="Crate" parent="CanvasLayer/Crates" instance=ExtResource("3_2hvqq")]
+position = Vector2(-160, 32)
+
+[node name="Crate2" parent="CanvasLayer/Crates" instance=ExtResource("3_2hvqq")]
+position = Vector2(-104, 16)
+
+[node name="Crate3" parent="CanvasLayer/Crates" instance=ExtResource("3_2hvqq")]
+position = Vector2(-144, -24)
+rotation = -0.29952636
+
+[node name="Tiling" type="TextureRect" parent="CanvasLayer"]
+visible = false
+modulate = Color(0.30940008, 0.85, 0.23799998, 0.7058824)
+offset_left = -1952.0
+offset_top = -1296.0
+offset_right = 5600.0
+offset_bottom = 3056.0
+texture = ExtResource("6_lwc5i")
+stretch_mode = 1
+
+[node name="Icon" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(216, 320)
+texture = ExtResource("2_xxrj8")
+
+[node name="FlickerOverlay" type="Sprite2D" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_8imk4")
+position = Vector2(3644, 2052)
+scale = Vector2(156.6875, 104.1875)
+texture = ExtResource("2_xxrj8")
+metadata/_edit_lock_ = true
+
+[node name="FlashlightColor" type="Sprite2D" parent="CanvasLayer"]
+visible = false
+modulate = Color(0.67, 0.67, 0.67, 0.59607846)
+z_index = -10
+position = Vector2(1196.0005, 1080.0005)
+scale = Vector2(748.76184, 450.28574)
+texture = ExtResource("3_qv8o1")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="CanvasLayer"]
+occluder = SubResource("OccluderPolygon2D_xxrj8")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="CanvasLayer"]
+
+[node name="PointLight2D" type="PointLight2D" parent="CanvasLayer"]
+scale = Vector2(1, 2)
+energy = 0.89
+range_layer_min = -1
+range_layer_max = -1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+texture = ExtResource("4_qv8o1")
+offset = Vector2(150, 0)
+texture_scale = 3.0
+metadata/_edit_lock_ = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gio65")

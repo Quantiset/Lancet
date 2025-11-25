@@ -1,7 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7ds38wimdu2x"]
+[gd_scene load_steps=8 format=3 uid="uid://b7ds38wimdu2x"]
 
 [ext_resource type="Script" uid="uid://tisdu8oa664x" path="res://Scripts/main.gd" id="1_bo1nx"]
 [ext_resource type="Shader" uid="uid://bxf752e7t3mor" path="res://Scripts/CRT.gdshader" id="1_jjgbg"]
+[ext_resource type="FontFile" uid="uid://lb57psohyn0x" path="res://Assets/VCR_OSD_MONO_1.001.ttf" id="2_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://dw4hkqqhmpd0f" path="res://Scenes/bunker.tscn" id="3_8gbba"]
+
+[sub_resource type="Theme" id="Theme_kry3j"]
+default_font = ExtResource("2_jjvhh")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_8gbba"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bo1nx"]
 shader = ExtResource("1_jjgbg")
@@ -12,16 +20,16 @@ shader_parameter/grille_opacity = 0.3
 shader_parameter/resolution = Vector2(640, 480)
 shader_parameter/pixelate = false
 shader_parameter/roll = true
-shader_parameter/roll_speed = 6.0
-shader_parameter/roll_size = 15.0
-shader_parameter/roll_variation = 1.8
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 12.00000057
+shader_parameter/roll_variation = 0.83200003626012
 shader_parameter/distort_intensity = 0.05
 shader_parameter/noise_opacity = 0.4
 shader_parameter/noise_speed = 5.0
 shader_parameter/static_noise_intensity = 0.06
 shader_parameter/aberration = 0.03
 shader_parameter/brightness = 1.4
-shader_parameter/discolor = true
+shader_parameter/discolor = false
 shader_parameter/warp_amount = 0.0
 shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.4
@@ -33,6 +41,7 @@ script = ExtResource("1_bo1nx")
 [node name="Screen" type="MarginContainer" parent="."]
 offset_right = 1152.0
 offset_bottom = 648.0
+theme = SubResource("Theme_kry3j")
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -41,17 +50,36 @@ theme_override_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="Screen"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Screen/HBoxContainer"]
-custom_minimum_size = Vector2(800, 0)
+[node name="Viewport" type="VBoxContainer" parent="Screen/HBoxContainer"]
 layout_mode = 2
 
-[node name="CodeEdit" type="CodeEdit" parent="Screen/HBoxContainer"]
+[node name="ColorRect" type="ColorRect" parent="Screen/HBoxContainer/Viewport"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(0, 1, 0.083333254, 1)
+
+[node name="TextureRect" type="TextureRect" parent="Screen/HBoxContainer/Viewport"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+texture = SubResource("ViewportTexture_8gbba")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Screen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="Screen/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(0, 1, 0.083333254, 1)
+
+[node name="CodeEdit" type="CodeEdit" parent="Screen/HBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.05000007, 1, 0, 1)
 text = "Available methods: 
-move
+login
 > "
 drag_and_drop_selection_enabled = false
 virtual_keyboard_enabled = false
@@ -68,4 +96,11 @@ offset_bottom = 648.0
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[connection signal="text_changed" from="Screen/HBoxContainer/CodeEdit" to="." method="_on_code_edit_text_changed"]
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+
+[node name="Bunker" parent="SubViewport" instance=ExtResource("3_8gbba")]
+
+[connection signal="focus_entered" from="Screen/HBoxContainer/Viewport/TextureRect" to="." method="_on_viewport_focus_entered"]
+[connection signal="focus_exited" from="Screen/HBoxContainer/Viewport/TextureRect" to="." method="_on_viewport_focus_exited"]
+[connection signal="text_changed" from="Screen/HBoxContainer/VBoxContainer2/CodeEdit" to="." method="_on_code_edit_text_changed"]
