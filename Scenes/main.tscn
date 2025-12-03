@@ -1,12 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://b7ds38wimdu2x"]
+[gd_scene load_steps=11 format=3 uid="uid://b7ds38wimdu2x"]
 
 [ext_resource type="Script" uid="uid://tisdu8oa664x" path="res://Scripts/main.gd" id="1_bo1nx"]
 [ext_resource type="Shader" uid="uid://bxf752e7t3mor" path="res://Scripts/CRT.gdshader" id="1_jjgbg"]
 [ext_resource type="FontFile" uid="uid://lb57psohyn0x" path="res://Assets/VCR_OSD_MONO_1.001.ttf" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://dw4hkqqhmpd0f" path="res://Scenes/bunker.tscn" id="3_8gbba"]
+[ext_resource type="Shader" uid="uid://c0ohq4ikqu8xo" path="res://Scripts/Grayscale.gdshader" id="3_kry3j"]
+[ext_resource type="Texture2D" uid="uid://dhgyxelodmd6f" path="res://Assets/vecteezy_blood-splatter-on-transparent-background_30341651.png" id="5_21xkr"]
 
 [sub_resource type="Theme" id="Theme_kry3j"]
 default_font = ExtResource("2_jjvhh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21xkr"]
+shader = ExtResource("3_kry3j")
+shader_parameter/enabled = false
+shader_parameter/turn_red = false
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_8gbba"]
 viewport_path = NodePath("SubViewport")
@@ -54,12 +61,14 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="ColorRect" type="ColorRect" parent="Screen/HBoxContainer/Viewport"]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 color = Color(0, 1, 0.083333254, 1)
 
 [node name="TextureRect" type="TextureRect" parent="Screen/HBoxContainer/Viewport"]
-custom_minimum_size = Vector2(800, 0)
+material = SubResource("ShaderMaterial_21xkr")
+custom_minimum_size = Vector2(700, 0)
 layout_mode = 2
 texture = SubResource("ViewportTexture_8gbba")
 
@@ -78,13 +87,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.05000007, 1, 0, 1)
-text = "Available methods: 
+text = "> BOOT_SEQUENCE_INIT...
+> LOADING LANCET_OS [v. 4.0.2]
+> CHECKING PERIPHERALS... DRONE_LINK [OK]
+> CHECKING M_INHIBITORS... [OK]
+> ESTABLISHING CONNECTION TO REMOTE ASSET...
+__________________
+Available commands: 
 login
 > "
+selecting_enabled = false
 drag_and_drop_selection_enabled = false
 virtual_keyboard_enabled = false
 virtual_keyboard_show_on_focus = false
 wrap_mode = 1
+autowrap_mode = 1
 scroll_fit_content_height = true
 
 [node name="Overlay" type="CanvasLayer" parent="."]
@@ -95,6 +112,12 @@ offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
 metadata/_edit_lock_ = true
+
+[node name="Blood" type="Sprite2D" parent="Overlay"]
+visible = false
+position = Vector2(575, 320)
+scale = Vector2(0.22934256, 0.24272148)
+texture = ExtResource("5_21xkr")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true

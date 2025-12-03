@@ -1,0 +1,46 @@
+[gd_scene load_steps=9 format=3 uid="uid://bdc7fsfj88h15"]
+
+[ext_resource type="Texture2D" uid="uid://c2f76di0cljee" path="res://Assets/head.png" id="1_byrx8"]
+[ext_resource type="Script" uid="uid://t8xfg5631vr3" path="res://Scripts/human.gd" id="1_j03jf"]
+
+[sub_resource type="Gradient" id="Gradient_j03jf"]
+offsets = PackedFloat32Array(0, 0.2735849, 1)
+colors = PackedColorArray(1, 0.5, 0, 1, 1, 0, 0, 1, 1, 0.100000024, 0.100000024, 0.13333334)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_073c6"]
+gradient = SubResource("Gradient_j03jf")
+
+[sub_resource type="Curve" id="Curve_42mg8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.033707857), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8atu2"]
+curve = SubResource("Curve_42mg8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jukff"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(16, 16, 1)
+emission_shape = 1
+emission_sphere_radius = 1.0
+scale_min = 10.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_8atu2")
+color_ramp = SubResource("GradientTexture1D_073c6")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_byrx8"]
+radius = 16.0
+
+[node name="Human" type="CharacterBody2D" groups=["Human"]]
+script = ExtResource("1_j03jf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.47, 0.28623, 0.14570001, 1)
+texture = ExtResource("1_byrx8")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 100
+lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_jukff")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_byrx8")

@@ -10,6 +10,7 @@ func _ready() -> void:
 	$Walls/Polygon2D.polygon = poly
 	$CanvasLayer/LightOccluder2D.occluder.polygon = poly
 	
+	$CanvasLayer/FlickerOverlay.show()
 	$CanvasLayer/FlashlightColor.show()
 	$CanvasLayer/Tiling.show()
 	$CanvasLayer/CanvasModulate.color = Color(0,0,0)

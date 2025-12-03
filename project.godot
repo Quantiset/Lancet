@@ -15,6 +15,10 @@ run/main_scene="uid://b7ds38wimdu2x"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+InteractableDialogue="*res://Scripts/InteractableDialogue.gd"
+
 [input]
 
 W={
